@@ -1,0 +1,41 @@
+version: '2'
+
+services:
+
+  redmine:
+    image: redmine:3.3-passenger
+    environment:
+      REDMINE_DB_USERNAME: redmine
+      REDMINE_DB_PASSWORD: secret
+      HTTP_PROXY:
+      HTTPS_PROXY:
+      http_proxy:
+      https_proxy:
+    ports:
+      - "3000:3000"
+    volumes_from:
+      - redmine-data
+    depends_on:
+      - redmine-data
+      - redmine-db
+
+  redmine-data:
+    image: busybox
+    volumes:
+      - /usr/src/redmine/files
+
+  redmine-db:
+    image: postgres:9.6-alpine
+    environment:
+      POSTGRES_USER: redmine
+      POSTGRES_PASSWORD: secret
+    volumes_from:
+      - redmine-db-data
+    depends_on:
+      - redmine-db-data
+
+  redmine-db-data:
+    image: busybox
+    volumes:
+      - /var/lib/postgresql/data
+
