@@ -6,29 +6,49 @@
 - Plugins
   - [Redmine Backlogs](https://backlogs.github.io/www/)
 
-## Installation
+## How to install
 
-- Execute the following commands
+- run the following commands
 
 ```
-$ git clone https://github.com/kiyohome/redmine-on-docker.git
-$ cd 3.3/
-$ docker-compose up -d
-$ ./plugins.sh
+  $ git clone https://github.com/kiyohome/redmine-on-docker.git
+  $ cd 3.3/
+  $ docker-compose up -d
+  $ ./plugins.sh
 ```
 
-- Access "http://localhost:3000/" in the browser
-- Sign in
+- access "http://localhost:3000/" in the browser
+- sign in
   - Login: admin
   - Password: admin
-- Add Story/Task trackers
-  - Administration > Trackers > New Tracker
-- Configure Redmine Backlogs
-  - Administration > Plugins > Configure of Redmine Backlogs
-  - Story trackers: Bug -> Story
-  - Default story tracker: Bug -> Story
-  - Task tracker: Bug -> Task
-- Create project
+- create the project
   - Projects > New project
-  - Modules: Check Backlogs
-- Let's enjoy Redmine life!
+
+## How to configure
+
+### Redmine Backlogs
+
+- Add the Story/Task trackers
+  - Administration > Trackers > New Tracker
+- Configure the Backlogs
+  - Administration > Plugins > Configure of Redmine Backlogs
+    - Story trackers: Bug -> Story
+    - Default story tracker: Bug -> Story
+    - Task tracker: Bug -> Task
+- Enable the Story/Task trackers on the project setting page
+  - Settings > Information > Trackers
+- Enable the module on the project setting page
+
+### Redmine Code Review
+
+- Add the Feedback tracker
+  - Administration > Trackers > New Tracker
+- Enable the Feedback tracker on the project setting page
+  - Settings > Information > Trackers
+- Enable the module on the project setting page
+  - Settings > Modules
+- Configure the Code Review
+  - Settings > Code review
+    - Tracker: Feedback
+- Create the repository
+  - Settings > Repositories > New repository
