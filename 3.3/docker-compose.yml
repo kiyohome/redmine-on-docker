@@ -39,3 +39,30 @@ services:
     volumes:
       - /var/lib/postgresql/data
 
+  gitbucket:
+    image: f99aq8ove/gitbucket:3.14
+    environment:
+      GITBUCKET_OPTS: --prefix=/gitbucket
+      GITBUCKET_DB_URL: jdbc:postgresql://gitbucket-db/gitbucket
+      GITBUCKET_DB_USER: gitbucket
+      GITBUCKET_DB_PASSWORD: secret
+    ports:
+      - "8080:8080"
+      - "29418:29418"
+    depends_on:
+      - gitbucket-db
+
+  gitbucket-db:
+    image: postgres:9.6-alpine
+    environment:
+      POSTGRES_USER: gitbucket
+      POSTGRES_PASSWORD: secret
+    volumes_from:
+      - gitbucket-db-data
+    depends_on:
+      - gitbucket-db-data
+
+  gitbucket-db-data:
+    image: busybox
+    volumes:
+      - /var/lib/postgresql/data
