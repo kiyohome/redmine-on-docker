@@ -5,10 +5,12 @@
 - [Redmine](http://www.redmine.org/)
 - Plugins
   - [Redmine Backlogs](https://backlogs.github.io/www/)
+  - [Code Review](http://www.redmine.org/plugins/redmine_code_review)
+  - [Redmine GitHub Hook](https://github.com/koppen/redmine_github_hook)
 
 ## How to install
 
-- git clone and install
+- Run the following commands
 ```
   $ git clone https://github.com/kiyohome/redmine-on-docker.git
   $ cd 3.3/
@@ -19,35 +21,55 @@
 
 ### GitBucket
 
-- access "http://localhost:8080/" in the browser
-- sign in
+- Access "http://localhost:8080/" in the browser
+- Sign in
   - Username: root
   - Password: root
-- create the sample repository
-  - plus mark at the top right of the screen > New Repository
+- Create the sample repository
+  - Plus mark at the top right of the screen > New Repository
     - Repository name: nablarch-example-web
-  - git clone the nablarch-example-web and push new repository
+  - Run the following commands on your local machine
 ```
-git clone https://github.com/nablarch/nablarch-example-web.git
-cd nablarch-example-web
-git remote rm origin
-git remote add origin http://localhost:8080/git/root/nablarch-example-web.git
-git push -u origin master
+  $ git clone https://github.com/nablarch/nablarch-example-web.git
+  $ cd nablarch-example-web
+  $ git remote rm origin
+  $ git remote add origin http://localhost:8080/git/root/nablarch-example-web.git
+  $ git push -u origin master
 ```
+- Refresh the page in the browser
 
 ### Redmine
 
-- install plugins
+- Install the plugins
 ```
   $ cd 3.3/
   $ ./plugins.sh
 ```
-- access "http://localhost:3000/" in the browser
-- sign in
+- Access "http://localhost:3000/" in the browser
+- Sign in
   - Login: admin
   - Password: admin
-- create the project
+- Create the project
   - Projects > New project
+    - Name: nablarch-example-web
+    - Identifier: nablarch-example-web
+    - Modules:
+      - Backlogs: ON
+      - CodeReview: ON
+- Set the repository
+  - Get the bare repository
+```
+  $ docker-compose exec redmine bash
+  $ mkdir -p /var/redmine/git_repositories
+  $ cd /var/redmine/git_repositories
+  $ git clone --bare http://gitbucket:8080/git/root/nablarch-example-web.git
+  $ chown -R redmine:redmine /var/redmine/
+```
+  - Add new repository on project settings page
+    - Settings > Repositories tab > New repository
+      - SCM: Git
+      - Identifier: nablarch-example-web
+      - Path to repository: /var/redmine/git_repositories/nablarch-example-web.git
 
 ### Redmine Backlogs
 
@@ -60,7 +82,6 @@ git push -u origin master
     - Task tracker: Bug -> Task
 - Enable the Story/Task trackers on the project setting page
   - Settings > Information > Trackers
-- Enable the module on the project setting page
 
 ### Redmine Code Review
 
@@ -68,10 +89,13 @@ git push -u origin master
   - Administration > Trackers > New Tracker
 - Enable the Feedback tracker on the project setting page
   - Settings > Information > Trackers
-- Enable the module on the project setting page
-  - Settings > Modules
 - Configure the Code Review
   - Settings > Code review
-    - Tracker: Feedback
-- Create the repository
-  - Settings > Repositories > New repository
+    - Select the tracker for code reviews.: Feedback
+    - Select the tracker for code review assignments.: Story
+
+### Redmine Github Hook
+
+- Add webhook on GitBucket
+  - Project Settings > Service Hooks tab > Add webhook
+    - Payload URL: http://redmine:3000/github_hook?project_id=nablarch-example-web
