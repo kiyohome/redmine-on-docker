@@ -7,6 +7,7 @@
   - [Redmine Backlogs](https://backlogs.github.io/www/)
   - [Code Review](http://www.redmine.org/plugins/redmine_code_review)
   - [Redmine GitHub Hook](https://github.com/koppen/redmine_github_hook)
+- [GitBucket](https://github.com/gitbucket/gitbucket)
 
 ## How to install
 
