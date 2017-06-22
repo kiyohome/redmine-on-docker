@@ -49,6 +49,9 @@
 - Sign in
   - Login: admin
   - Password: admin
+- Configure roles and permissions for plugins
+  - Administration > Roles and permissions
+  - Manager/Developer: add all permissions of Backlogs/Code reviews
 - Create the project
   - Projects > New project
     - Name: nablarch-example-web
