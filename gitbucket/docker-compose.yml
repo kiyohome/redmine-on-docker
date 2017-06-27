@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+
+  gitbucket:
+    image: f99aq8ove/gitbucket:3.14
+    environment:
+      GITBUCKET_OPTS: --prefix=/gitbucket
+      GITBUCKET_DB_URL: jdbc:postgresql://gitbucket-db/gitbucket
+      GITBUCKET_DB_USER: gitbucket
+      GITBUCKET_DB_PASSWORD: gitbucket
+      NO_PROXY: redmine
+    ports:
+      - "8080:8080"
+      - "29418:29418"
+    volumes_from:
+      - gitbucket-data
+    depends_on:
+      - gitbucket-data
+      - gitbucket-db
+
+  gitbucket-data:
+    image: busybox
+    volumes:
+      - /gitbucket
+
+  gitbucket-db:
+    image: postgres:9.6-alpine
+    environment:
+      POSTGRES_USER: gitbucket
+      POSTGRES_PASSWORD: gitbucket
+    volumes_from:
+      - gitbucket-db-data
+    depends_on:
+      - gitbucket-db-data
+
+  gitbucket-db-data:
+    image: busybox
+    volumes:
+      - /var/lib/postgresql/data

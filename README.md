@@ -16,6 +16,8 @@
   $ git clone https://github.com/kiyohome/redmine-on-docker.git
   $ cd 3.3/
   $ docker-compose up -d
+  $ cd ../gitbucket
+  $ docker-compose up -d
 ```
 
 ## How to configure

@@ -4,9 +4,10 @@ services:
 
   redmine:
     image: redmine:3.3-passenger
+    restart: always
     environment:
       REDMINE_DB_USERNAME: redmine
-      REDMINE_DB_PASSWORD: secret
+      REDMINE_DB_PASSWORD: redmine
       HTTP_PROXY:
       HTTPS_PROXY:
       http_proxy:
@@ -27,52 +28,16 @@ services:
 
   redmine-db:
     image: postgres:9.6-alpine
+    restart: always
     environment:
       POSTGRES_USER: redmine
-      POSTGRES_PASSWORD: secret
+      POSTGRES_PASSWORD: redmine
     volumes_from:
       - redmine-db-data
     depends_on:
       - redmine-db-data
 
   redmine-db-data:
-    image: busybox
-    volumes:
-      - /var/lib/postgresql/data
-
-  gitbucket:
-    image: f99aq8ove/gitbucket:3.14
-    environment:
-      GITBUCKET_OPTS: --prefix=/gitbucket
-      GITBUCKET_DB_URL: jdbc:postgresql://gitbucket-db/gitbucket
-      GITBUCKET_DB_USER: gitbucket
-      GITBUCKET_DB_PASSWORD: secret
-      NO_PROXY: redmine
-    ports:
-      - "8080:8080"
-      - "29418:29418"
-    volumes_from:
-      - gitbucket-data
-    depends_on:
-      - gitbucket-data
-      - gitbucket-db
-
-  gitbucket-data:
-    image: busybox
-    volumes:
-      - /gitbucket
-
-  gitbucket-db:
-    image: postgres:9.6-alpine
-    environment:
-      POSTGRES_USER: gitbucket
-      POSTGRES_PASSWORD: secret
-    volumes_from:
-      - gitbucket-db-data
-    depends_on:
-      - gitbucket-db-data
-
-  gitbucket-db-data:
     image: busybox
     volumes:
       - /var/lib/postgresql/data
