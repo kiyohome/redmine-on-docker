@@ -105,3 +105,36 @@
 - Add webhook on GitBucket
   - Project Settings > Service Hooks tab > Add webhook
     - Payload URL: http://redmine:3000/github_hook?project_id=nablarch-example-web
+
+### Redmine backup/restore
+
+#### Backup
+
+- Run the following commands
+```
+$ cd 3.3/
+$ docker-compose ps
+        Name                      Command               State            Ports
+---------------------------------------------------------------------------------------
+33_redmine-data_1      sh                               Exit 0
+33_redmine-db-data_1   sh                               Exit 0
+33_redmine-db_1        docker-entrypoint.sh postgres    Up       5432/tcp
+33_redmine_1           /docker-entrypoint.sh pass ...   Up       0.0.0.0:3000->3000/tcp
+$ ./backup.sh 33_redmine-data_1 $(pwd)
+$ ./backup.sh 33_redmine-db-data_1 $(pwd)
+$ ls | grep 33_.*
+33_redmine-data_1_2017-06-29_1749.tar.xz
+33_redmine-db-data_1_2017-06-29_1749.tar.xz
+```
+
+#### Restore
+
+- Run the following commands
+```
+$ cd 3.3/
+$ ls | grep 33_.*
+33_redmine-data_1_2017-06-29_1749.tar.xz
+33_redmine-db-data_1_2017-06-29_1749.tar.xz
+$ ./restore.sh 33_redmine-data_1 $(pwd) 33_redmine-data_1_2017-06-29_1749.tar.xz
+$ ./restore.sh 33_redmine-db-data_1 /$(pwd) 33_redmine-db-data_1_2017-06-29_1749.tar.xz
+```
