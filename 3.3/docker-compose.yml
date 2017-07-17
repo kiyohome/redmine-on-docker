@@ -3,7 +3,7 @@ version: '2'
 services:
 
   redmine:
-    image: redmine:3.3-passenger
+    image: redmine:3.3.3-passenger
     restart: always
     environment:
       REDMINE_DB_POSTGRES: redmine-db
