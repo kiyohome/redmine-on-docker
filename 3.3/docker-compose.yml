@@ -9,6 +9,7 @@ services:
       REDMINE_DB_POSTGRES: redmine-db
       REDMINE_DB_USERNAME: redmine
       REDMINE_DB_PASSWORD: redmine
+      REDMINE_RELATIVE_URL_ROOT: /redmine
       HTTP_PROXY:
       HTTPS_PROXY:
       http_proxy:
